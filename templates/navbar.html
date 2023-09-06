@@ -1,0 +1,46 @@
+{% load static %}
+
+<nav>
+    <div class="header-a">
+        <div class="link"><h1><a href="{% url 'chat:home' %}" style="text-decoration: none; color: inherit;">ChatApp Beta</a></h1></div>
+    </div>
+    {% if user.is_authenticated %}
+        <div class="header-b">
+            <div style="margin: auto;">
+                Hey {{user.username}},
+                create a chat room or get started with an existing one!
+            </div>
+            <div class="navbar-actions">
+                <div class="link"><a href="{% url 'chat:logout' %}"><button class="navbar-a red">Logout</button></a></div>
+                <div class="link"><a href="{% url 'chat:create_room' %}"><button class="navbar-a">Create Room</button></a></div>
+            </div>
+        </div>
+    {% else %}
+        <div class="header-b">
+            <p>It appears that you are not signed in! You can't chat unless you <a href="{% url 'chat:login' %}">log in</a> to your account.</p>
+        </div>
+    {% endif %}
+    
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li>
+        <div class="messages-divider">
+            <div>
+                <img src="{% static 'img/info-circle.svg' %}" alt="CLOSE_BUTTON">
+            </div>
+            <div>
+                <b>{% if message.tags %}{{ message.tags | upper }}{% else %}GENERAL{% endif %}</b> - {{ message }}
+            </div>
+            <div>
+                <img src="{% static 'img/x.svg' %}" alt="CLOSE_BUTTON">
+            </div>
+        </div>
+        </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+</nav>
+
+
+<!-- <link rel="stylesheet" href="{% static 'styles.css' %}"> -->

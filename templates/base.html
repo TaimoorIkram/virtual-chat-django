@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <title>Document</title>
+</head>
+<body>
+    {% if request.path != '/chat/login/' %}
+        {% if request.path != '/chat/signup/' %}
+        <header>
+            {% include 'navbar.html' %}
+        </header>
+        {% endif %}
+    {% endif %}
+    
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    
+    {% if request.path != '/chat/login/' %}
+        {% if request.path != '/chat/signup/' %}    
+        <header>
+            {% include 'footer.html' %}
+        </header>
+        {% endif %}
+    {% endif %}
+</body>
+</html>

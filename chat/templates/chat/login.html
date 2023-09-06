@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="login-container">
+    {% if user.is_authenticated == False %}
+    <div class="login-top">
+        <h1 class="login-title">Login</h1>
+    </div>
+    <div class="login-bottom">
+        <form action="", method="post">
+            {% csrf_token %}
+            <div class="login-content">
+                <input class="login-field" aria-label="username" name="username" type="text">
+                <input class="login-field" aria-label="password" name="password" type="password">
+                <input class="login-submit" aria-label="submit_login" type="submit" value="Login">
+            </div>
+            <p>Don't have an account? Well then <a href="{% url 'chat:signup' %}">sign up</a> right here!</p>
+        </form>
+    </div>
+    {% else %}
+        <h3>Hmm, it appears you're already logged in, let's <a href="{% url 'chat:home' %}">go back</a>.</h3>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    {% if rooms %}
+    <div class="rooms-displayer">
+        {% for room in rooms %}
+            <div class="container">
+                <div>
+                    <h1>{{room.name}}</h1>
+                    <p>Room made by {{room.created_by.username}}</p>
+                </div>
+                <div>
+                    <p>{{room.description}}</p>
+                </div>
+                <div class="room-actions">
+                    <a href="{% url 'chat:room' room.name %}"><button class="button link">Participate in Chat</button></a>
+                    {% if user.username == room.created_by.username %}
+                    <a href="{% url 'chat:edit_room' room.id %}"><button class="link button">Edit Room</button></a>
+                    <form action="{% url 'chat:delete_room'%}" method="post">
+                        {% csrf_token %}
+                        <input aria-label="id" type="text" hidden name="id" value="{{room.id}}">
+                        <button class="link button" type="submit" style="background-color: crimson;">Delete</button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <h3>Oops! It doesn't seem like anyone has made any rooms at all, perhaps make a new one?</h3>
+    {% endif %}
+{% endblock %}

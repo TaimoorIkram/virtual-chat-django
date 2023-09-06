@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="login-container">
+    {% if user.is_authenticated == False %}
+    <div class="login-top">
+        <h1 class="login-title">Sign Up</h1>
+    </div>
+    <div class="login-bottom">
+        <form action="", method="post">
+            {% csrf_token %}
+            <div class="login-content">
+                {% for field in form %}
+                {{ field }}
+                {% endfor %}
+                <input class="login-submit" type="submit" value="Sign Up">
+            </div>
+            <p>Already have an account? Well then <a href="{% url 'chat:login' %}">login</a> right here!</p>
+        </form>
+    </div>
+    {% else %}
+        <h3>Hmm, it appears you're already logged in, let's <a href="{% url 'chat:home' %}">go back</a>.</h3>
+    {% endif %}
+</div>
+{% endblock %}

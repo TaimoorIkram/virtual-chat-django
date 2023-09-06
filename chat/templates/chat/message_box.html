@@ -1,0 +1,11 @@
+{% if chat.user.username == user.username %}
+<div id="previous_messages_sent">
+    <div id="message_username">{{ chat.user.username }}</div>
+    <div id="message_message" class="sent">{{ chat.message }}</div>
+</div>
+{% else %}
+<div id="previous_messages">
+    <div id="message_username">{{ chat.user.username }}</div>
+    <div id="message_message" class="recv">{{ chat.message }}</div>
+</div>
+{% endif %}
