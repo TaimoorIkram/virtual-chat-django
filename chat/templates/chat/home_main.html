@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="options-displayer">
+        <div class="option">
+            <img src="../../../static/img/room-icon.png" alt="ROOM">
+            <h1>Rooms</h1>
+            <p>An open chat, for all the people logged into the application! Public features.</p>
+            <div class="option-button">
+                <a href="{% url 'chat:home' %}"><button class="button link">Check Some Rooms</button></a>
+            </div>
+        </div>
+        <div class="option">
+            <img src="../../../static/img/villa-icon.png" alt="VILLA">
+            <h1>Villas (WIP)</h1>
+            <p>A smaller, less secure version of discord. Create as many rooms in this villa as you like. Private feature.</p>
+            <div class="option-button">
+                <button class="button" disabled>Check Some Villas</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

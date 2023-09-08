@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Message, Room
+from .models import Message, Room, Villa
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from .forms import RoomForm, SignupForm
@@ -112,3 +112,20 @@ def signup_user(request):
     signup_form = SignupForm()
 
     return render(request, 'chat/signup.html', {'form': signup_form})
+
+def villa(request, villa_name):
+    villa = Villa.objects.get(name=villa_name)
+    rooms = Room.objects.filter(villa=villa.id)
+    # previous_chat = Message.objects.filter(room=villa_id).order_by('send_time')
+
+    return render(request, 'chat/villa.html', {'villa': villa, 'rooms': rooms})
+
+def villa_room(request, villa_name, room_name):
+    villa = Villa.objects.get(name=villa_name)
+    rooms =  Room.objects.filter(villa=villa.id)
+    room_current = rooms.get(name=room_name)
+    previous_chat = Message.objects.filter(room=room_current.id).order_by('send_time')
+    return render(request, 'chat/villa_room.html', {'villa': villa, 'room_current': room_current.name, 'rooms': rooms, 'old_chat': previous_chat})
+
+def home_main(request):
+    return render(request, 'chat/home_main.html')

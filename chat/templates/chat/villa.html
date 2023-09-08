@@ -5,7 +5,6 @@
     {% if rooms %}
     <div class="rooms-displayer">
         {% for room in rooms %}
-            {% if room.villa is None %}
             <div class="container">
                 <div>
                     <h1>{{room.name}}</h1>
@@ -15,7 +14,7 @@
                     <p>{{room.description}}</p>
                 </div>
                 <div class="room-actions">
-                    <a href="{% url 'chat:room' room.name %}"><button class="button link">Participate in Chat</button></a>
+                    <a href="{% url 'chat:villa_room' villa.name room.name %}"><button class="button link">Participate in Chat</button></a>
                     {% if user.username == room.created_by.username %}
                     <a href="{% url 'chat:edit_room' room.id %}"><button class="link button">Edit Room</button></a>
                     <form action="{% url 'chat:delete_room'%}" method="post">
@@ -26,7 +25,6 @@
                     {% endif %}
                 </div>
             </div>
-            {% endif %}
         {% endfor %}
     </div>
     {% else %}

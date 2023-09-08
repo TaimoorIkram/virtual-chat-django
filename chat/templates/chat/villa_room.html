@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="villa-chat-displayer">
+    <div class="channels-displayer">
+        <h1>Other Rooms in this Villa</h1>
+        {% if rooms %}
+            <div class="channel-name"><b>{{room_current}}</b></div>
+            {% for room in rooms %}
+                {% if room.name != room_current %}
+                    <a href="{% url 'chat:villa_room' villa.name room.name%}"><div class="channel-name link">{{room.name}}</div></a>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+    <div class="chat-displayer">
+        <div class="chat-top">
+            <a href="{% url 'chat:villa' villa.name %}">Go back</a>
+            <h1>Welcome to {{room_current}}!</h1>
+        </div>
+        {{ room_current|json_script:'room_name'}}
+        {{ user.username|json_script:'user'}}
+
+        <div class="chat_container_wrapper">
+            <div class="chat_container_content">
+                {% if old_chat %}
+                    {% for chat in old_chat %}
+                        {% include 'chat/message_box.html' %}
+                    {% endfor %}
+                {% endif %}
+                <div id="messages"></div>
+            </div>
+            <div>
+                {% if user.is_authenticated %}
+                    <form id="form" action="">
+                        <input aria-label="message" class="message_input" placeholder="Type 'Hey guys hows it going!'" name="message" id="room-name-input" type="text" size="100"><br>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <script type="text/javascript">
+        // establish connection
+        const room_name = JSON.parse(document.getElementById('room_name').textContent);
+        let url = `ws://${window.location.host}/ws/chat/${room_name}/`;
+        const chatSocket = new WebSocket(url);
+        
+        chatSocket.onmessage = function(e) {
+            let data = JSON.parse(e.data);
+            console.log('Data:', data);
+            
+            if(data.type === 'chat') {
+                let messages = document.getElementById('messages');
+                messages.insertAdjacentHTML('beforeend', `
+                    <div id="previous_messages_sent">
+                        <div id="message_username">${data.user}</div>
+                        <div id="message_message" class='sent'>${data.message}</div>
+                    </div>
+                    `
+                    );
+                }
+            }
+        
+        // form controllers
+        let form = document.getElementById('form')
+        const user = JSON.parse(document.getElementById('user').textContent);
+        form.addEventListener('submit', (e) => {
+            e.preventDefault()
+            let message = e.target.message.value
+            chatSocket.send(JSON.stringify({
+                'message':message,
+                'user': user
+            }))
+            form.reset()
+        })
+    </script>
+{% endblock %}
